@@ -6,8 +6,8 @@ from alibabacloud_dysmsapi20170525.client import Client as Dysmsapi20170525Clien
 from alibabacloud_tea_openapi import models as open_api_models
 from alibabacloud_dysmsapi20170525 import models as dysmsapi_20170525_models
 
-ACCESS_KEY_ID = 'LTAI5tDFRf4NqJax1c2R78Ub'
-ACCESS_KEY_SECRET = 'X8IT5TeylfhZV7CgOU5iasux5mYuBf'
+ACCESS_KEY_ID = 'xxxxxtDFRf4NqJax1c2xxxxx'
+ACCESS_KEY_SECRET = 'xxxxxTeylfhZV7CgOU5iasux5xxxxx'
 
 
 class Sample:
