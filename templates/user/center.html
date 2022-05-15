@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    用户中心
+{% endblock %}
+
+{% block style %}
+    <style>
+        .header {
+            position: relative;
+            height: 240px;
+            box-shadow: 1px 2px 3px #999;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .header .top {
+            height: 140px;
+            background-color: skyblue;
+            overflow: hidden;
+        }
+
+        .header .top img {
+            width: 100%;
+        }
+
+        .cover {
+            position: absolute;
+            top: 50px;
+            right: 28px;
+            padding: 5px 15px 5px 25px;
+            border-radius: 3px;
+            color: #d3d3d3;
+            border: 1px solid #d3d3d3;
+            cursor: pointer;
+        }
+
+        .head-icon {
+            position: absolute;
+            top: 48px;
+            left: 24px;
+            width: 168px;
+            height: 168px;
+            border: 5px solid #fff;
+            border-radius: 5px;
+        }
+
+        .head-icon img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .header .bottom {
+            height: 100px;
+            background-color: #fff;
+            padding-top: 10px;
+        }
+
+        .edit {
+            margin-left: 210px;
+            overflow: hidden;
+        }
+
+        .edit span {
+            display: block;
+            font-size: 27px;
+        }
+
+        .edit a {
+            float: right;
+            margin-right: 30px;
+            padding: 5px 15px;
+            color: #06f;
+            border-radius: 3px;
+            border: 1px solid #06f;
+        }
+
+        .edit a:hover {
+            background-color: rgba(0, 102, 255, .1);
+        }
+
+        .article-box {
+            width: 100%;
+            height: 180px;
+            background-color: #fff;
+            padding: 10px 20px 5px;
+            margin-bottom: 10px;
+            box-shadow: 1px 2px 3px #999;
+        }
+
+        .article-box a {
+            text-decoration: underline;
+        }
+
+        .text {
+            height: 86px;
+        {#background-color: skyblue;#}
+
+        }
+
+        .text p {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+        }
+
+        .icon {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .right-nav {
+            float: right;
+            width: 238px;
+            height: 500px;
+            background-color: #bfa;
+        }
+
+        .left-article {
+            float: left;
+            width: 730px;
+        }
+
+        .about {
+            height: 220px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, .5);
+        }
+
+        .about h2 {
+            background-color: #fff;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            padding-left: 10px;
+        }
+
+        .count {
+            width: 100%;
+            height: 70px;
+            padding: 10px;
+            background-color: pink;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .count span {
+            display: inline-block;
+            width: 49%;
+        }
+
+        .count span b {
+            display: block;
+        }
+
+        .info a {
+            margin-left: 20px;
+            padding: 8px 50px;
+            border: 1px solid #06f;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="header">
+        <div class="top">
+            <img src="{% static 'images/head.jpg' %}" alt="">
+            <span class="cover">上传封面照片</span>
+        </div>
+        <div class="head-icon">
+            {% if user.userprofile.icon %}
+                <img src="/static/media/{{ user.userprofile.icon }}" alt="">
+            {% else %}
+                <img src="{% static 'media/new_icon.png' %}" alt="">
+            {% endif %}
+        </div>
+        <div class="bottom">
+            <div class="edit">
+                <span>{{ user.username }}</span>
+                <a href="{% url 'user:profile' %}">编辑个人资料</a>
+            </div>
+        </div>
+    </div>
+    <div class="middle">
+
+        <div class="left-article">
+            {% for article in articles %}
+                <div class="article-box">
+                    <div class="title">
+                        <h4><a href="{% url 'article:article_info' article.id %}">{{ article.title }}</a></h4>
+                    </div>
+                    <div class="text">
+                        <p>{{ article.text }}</p>
+                    </div>
+                    <div class="icon">
+                        <span>作者：{{ article.user.username }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span>访问量：{{ article.visit_num }}</span>
+                        <span>喜欢：{{ article.like_num }}</span>
+                        <span>收藏：{{ article.save_num }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="right-nav">
+            <div class="about">
+                <h2>创作中心</h2>
+                <div class="info-box">
+                    <div class="info">
+                        <div class="count">
+                            <span>今日阅读数<b>0</b></span>
+                            <span>今日点赞数<b>0</b></span>
+                        </div>
+                        <a href="{% url 'article:publish' %}">进入创作中心 ></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

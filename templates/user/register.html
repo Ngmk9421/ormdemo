@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}注册{% endblock %}</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #f1f1f1;
+        }
+
+        .box {
+            width: 300px;
+            height: 450px;
+            background-color: #fff;
+            margin: 80px auto;
+            padding: 50px 50px 30px;
+        }
+
+        .content {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    {% block style %}
+        <style>
+            .nav {
+                height: 50px;
+                font-size: 20px;
+                padding: 20px 0 0 70px;
+            }
+
+            .nav_style {
+                color: #ea6f5a;
+                border-bottom: 2px solid #ea6f5a;
+            }
+
+            .nav a {
+                padding: 7px 15px;
+            }
+
+            .info {
+                margin-top: 40px;
+            }
+
+            .info input {
+                width: 250px;
+                height: 42px;
+                padding: 4px 12px 4px 35px;
+                outline: none;
+            }
+
+            .btn {
+                margin-top: 40px;
+                width: 300px;
+                height: 43px;
+                border-radius: 21px;
+                border: none;
+                font-size: 18px;
+                color: #fff;
+                background-color: #42c02e;
+                cursor: pointer;
+            }
+        </style>
+    {% endblock %}
+    {% block js %}{% endblock %}
+</head>
+<body>
+<div class="box">
+    {% if msg %}
+        <div>{{ msg }}</div>
+    {% endif %}
+    <div class="content">
+        {% block content %}
+            <form action="{% url 'user:register' %}" method="post">
+                {% csrf_token %}
+                <div class="nav">
+                    <a class="login" href="{% url 'user:login' %}">登录</a>
+                    <span>·</span>
+                    <a class="register nav_style" href="">注册</a>
+                </div>
+                <div class="info">
+                    <div><input type="text" placeholder="用户名" name="username"></div>
+                    <div><input type="email" placeholder="邮箱" name="mail" required></div>
+                    <div><input type="text" placeholder="手机号" name="phone"></div>
+                    <div><input type="password" placeholder="密码" name="password"></div>
+                    <div><input type="password" placeholder="确认密码" name="confirm"></div>
+                </div>
+                <input type="submit" class="btn" value="注册">
+                <p style="text-align: center">----------其他社交账号----------</p>
+            </form>
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>

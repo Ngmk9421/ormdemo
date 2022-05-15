@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}
+    首页
+{% endblock %}
+
+{% block style %}
+    <style>
+        .middle {
+            overflow: hidden;
+        }
+
+        .article-box {
+            width: 100%;
+            height: 180px;
+            background-color: #fff;
+            padding: 10px 20px 5px;
+            margin-bottom: 10px;
+            box-shadow: 1px 2px 3px #999;
+        }
+
+        .article-box a {
+            text-decoration: underline;
+        }
+
+        .text {
+            height: 86px;
+        }
+
+        .text p {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+        }
+
+        .icon {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .right-nav {
+            float: right;
+            width: 238px;
+            height: 500px;
+            background-color: #bfa;
+        }
+
+        .left-article {
+            float: left;
+            width: 730px;
+        }
+
+        .about {
+            height: 210px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, .5);
+        }
+
+        .about h2 {
+            background-color: #fff;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 10px 0 8px 15px;
+        }
+
+        .hot-box ul {
+            padding: 10px 0 5px 15px;
+        }
+
+        .hot-box ul li {
+            padding: 3px 0;
+        }
+
+        .search-box {
+            border-bottom: 2px solid black;
+        }
+
+        .search-box input {
+            text-indent: 10px;
+            outline: none;
+            height: 35px;
+            border: none;
+        }
+
+        .search-box button {
+            width: 58px;
+            height: 35px;
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            background-color: black;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="middle">
+        <div class="left-article">
+            {% for article in articles %}
+                <div class="article-box">
+                    <div class="title">
+                        <h4><a href="{% url 'article:article_info' article.id %}">{{ article.title }}</a></h4>
+                    </div>
+                    <div class="text">
+                        <p>{{ article.text }}</p>
+                    </div>
+                    <div class="icon">
+                        <span>作者：{{ article.user.username }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span>访问量：{{ article.visit_num }}</span>
+                        <span>喜欢：{{ article.like_num }}</span>
+                        <span>收藏：{{ article.save_num }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="right-nav">
+            <div class="about">
+                <h2>热门</h2>
+                <div class="hot-box">
+                    <ul>
+                        {% for hot in hots %}
+                            <li><a href="{% url 'article:article_info' hot.id %}">{{ hot.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="search-box">
+                <input type="text" name="search" placeholder="请输入关键字">
+                <button>搜索</button>
+            </div>
+            <h4 style="margin-top: 30px;"><a href="http://100.100.1.36" style="color: red;">友情链接-柯</a></h4>
+        </div>
+    </div>
+{% endblock %}
+
+

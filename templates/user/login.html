@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}登录{% endblock %}</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #f1f1f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .box {
+            width: 300px;
+            height: 370px;
+            background-color: #fff;
+            margin: 100px auto;
+            padding: 50px 50px 30px;
+        }
+
+        .content {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    {% block style %}
+        <style>
+            .nav {
+                height: 50px;
+                font-size: 20px;
+                padding: 20px 0 0 70px;
+            }
+
+            .nav_style {
+                color: #ea6f5a;
+                border-bottom: 2px solid #ea6f5a;
+            }
+
+            .nav a {
+                padding: 7px 15px;
+            }
+
+            .info {
+                margin-top: 40px;
+                height: 110px;
+            }
+
+            .info input {
+                width: 250px;
+                height: 42px;
+                padding: 4px 12px 4px 35px;
+                outline: none;
+            }
+
+            .btn {
+                margin-top: 40px;
+                width: 300px;
+                height: 43px;
+                border-radius: 21px;
+                border: none;
+                font-size: 18px;
+                color: #fff;
+                background-color: #3194d0;
+                cursor: pointer;
+            }
+
+            .s-left {
+                float: left;
+            }
+
+            .s-right {
+                float: right;
+                cursor: pointer;
+            }
+        </style>
+    {% endblock %}
+    {% block js %}{% endblock %}
+</head>
+<body>
+<div class="box">
+    {% if msg %}
+        <div>{{ msg }}</div>
+    {% endif %}
+    <div class="content">
+        {% block content %}
+            <form action="{% url 'user:login' %}" method="post">
+                {% csrf_token %}
+                <div class="nav">
+                    <a class="login nav_style" href="{% url 'user:login' %}">登录</a>
+                    <span>·</span>
+                    <a class="register" href="{% url 'user:register' %}">注册</a>
+                </div>
+                <div class="info">
+                    <div><input type="text" placeholder="用户名" name="username" value="{{ username }}"></div>
+                    <div><input type="password" placeholder="密码" name="password"></div>
+                </div>
+                <div>
+                    <div class="s-left">
+                        <input type="checkbox" checked name="rem_name">记住我
+                    </div>
+                    <div class="s-right">
+                        <span>登录遇到问题？</span>
+                        <ul class="update-box" style="display: none">
+                            <li><a href="{% url 'user:forget_code_pwd' %}">用手机号重置密码</a></li>
+                            <li><a href="{% url 'user:forget_mail_pwd' %}">用邮箱重置密码</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <input type="submit" class="btn" value="登录">
+                <p style="text-align: center">----------其他社交账号----------</p>
+            </form>
+        {% endblock %}
+    </div>
+</div>
+
+<script>
+    var flag = true
+    $('.s-right').click(function () {
+        if (flag) {
+            $('.update-box').css('display', 'block')
+        } else {
+            $('.update-box').css('display', 'none')
+        }
+        flag = !flag
+    })
+</script>
+</body>
+</html>

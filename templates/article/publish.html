@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}
+    发布文章
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'article:publish' %}" method="post">
+        {% csrf_token %}
+        <p>文章类型：<select name="type_id" id="">
+            {% for type in types %}
+                <option value="{{ type.id }}">{{ type.tname }}</option>
+            {% endfor %}
+        </select></p>
+        <p>文章标题：<input type="text" name="title" required></p>
+        <p>文章简介：<input type="text" name="desc" required></p>
+        <p>文章内容：<textarea name="content" id="" cols="30" rows="10" required></textarea></p>
+        <p><input type="submit" value="发布"></p>
+    </form>
+{% endblock %}

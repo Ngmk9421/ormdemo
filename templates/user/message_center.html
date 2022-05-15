@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block style %}
+    <style>
+        .show_msg {
+            width: 400px;
+            height: 300px;
+            background-color: pink;
+            overflow: auto;
+        }
+
+        .msg {
+            width: 400px;
+            height: 70px;
+            resize: none;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="middle">
+        <p>我的消息</p>
+        {% csrf_token %}
+        <input type="hidden" value="{{ receive_id }}">
+        <ul class="show_msg">
+            {% for message in messages %}
+                <li>{{ message.send_time }}</li>
+                <li style="margin-bottom: 50px">{% if message.send_id == receive_id %}
+                    {{ user1.username }}
+                {% else %}
+                    {{ user.username }}
+                {% endif %}：{{ message.msg }}</li>
+            {% endfor %}
+        </ul>
+        <div class="send_msg">
+            <textarea name="" id="" cols="30" rows="10" class="msg"></textarea>
+            <button class="send">发送</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        var csrf = $("input[name='csrfmiddlewaretoken']").val()
+        var timer = null
+        $(function () {
+            timer = setInterval(() => {
+                $.post('http://100.100.6.186/user/msg_update', {
+                    'csrfmiddlewaretoken': csrf,
+                    send_id: '{{ user.id }}',
+                    receive_id: '{{ receive_id }}'
+                }, function (result) {
+                    $('.show_msg').html('')
+                    {#console.log(result.data)#}
+                    for (let data of result.data) {
+                        {#console.log(data)#}
+                        $('.show_msg').append($('<li>' + data.send_time + '</li>' + '<li style="margin-bottom: 50px">' + data.msg + '</li>'))
+                    }
+                })
+                $('.show_msg').scrollTop($('.show_msg')[0].scrollHeight)
+            }, 1000)
+
+            setTimeout(function () {
+                clearInterval(timer)
+            }, 300000)
+        })
+
+        $('.send').click(() => {
+            $('.show_msg').scrollTop($('.show_msg')[0].scrollHeight)
+            var msg = $('.msg').val()
+            if (!msg) {
+                alert('发送的内容不能为空！')
+                return
+            }
+            $('.msg').val('')
+            $.post('http://100.100.6.186/user/msg', {
+                msg,
+                'csrfmiddlewaretoken': csrf,
+                send_id: '{{ user.id }}',
+                receive_id: '{{ receive_id }}'
+            }, function (data) {
+                $('.show_msg').append($('<li>{{ user.username }}：' + data.msg + '</li>'))
+            })
+        })
+    </script>
+{% endblock %}
+

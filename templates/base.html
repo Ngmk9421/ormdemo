@@ -1,0 +1,173 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #efefef;
+            height: 2000px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .nav-box {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 55px;
+            background: rgba(255, 255, 255, .7);
+            box-shadow: 0 2px 3px #999;
+            z-index: 9;
+        }
+
+        .header-box {
+            width: 980px;
+            margin: 0 auto;
+        }
+
+        .content-box {
+            width: 980px;
+            margin: 70px auto 0;
+            overflow: hidden;
+            background-color: #bfa;
+        }
+
+        .logo {
+            display: inline-block;
+            width: 130px;
+            height: 55px;
+            text-align: center;
+        }
+
+        .logo a {
+            font-size: 25px;
+            line-height: 55px;
+        }
+
+        .right {
+            float: right;
+            height: 55px;
+        }
+
+        .nav > li {
+            float: left;
+            margin: 10px 5px;
+        }
+
+        .right li:hover {
+            background-color: #eee;
+        }
+
+        .right li a {
+            display: block;
+            padding: 7px 22px
+        }
+
+        .text-color {
+            color: #f65a85;
+        }
+
+        .icon-box {
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+
+        .icon-nav {
+            position: absolute;
+            top: 38px;
+            left: -24px;
+            width: 90px;
+            padding: 3px 0;
+            background-color: #eee;
+            z-index: 9999;
+        }
+
+        .icon-nav li a {
+            display: block;
+            padding: 5px 5px 5px 15px;
+            cursor: pointer;
+        }
+
+        .icon-box img {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+    </style>
+    {% block style %}
+
+    {% endblock %}
+</head>
+<body>
+<div class="nav-box">
+    <div class="header-box">
+        <div class="logo">
+            <a href="">晨曦记录</a>
+        </div>
+        <div class="right">
+            <ul class="nav">
+                <li><a href="{% url 'index' %}" class="text-color">首页</a></li>
+                <li><a href="{% url 'article:article_type' type_id=1 %}">文章</a></li>
+                <li><a href="{% url 'article:leave' %}">留言</a></li>
+                {% if user %}
+                    <li class="icon-box">
+                        {% if user.userprofile.icon %}
+                            <img src="/static/media/{{ user.userprofile.icon }}" alt="">
+                        {% else %}
+                            <img src="{% static 'media/new_icon.png' %}" alt="">
+                        {% endif %}
+                        <ul class="icon-nav" style="display: none">
+                            <li><a href="{% url 'user:center' %}">我的主页</a></li>
+                            <li><a href="{% url 'article:publish' %}">创作中心</a></li>
+                            <li><a href="{% url 'user:msg_center' %}">消息</a></li>
+                            <li><a href="">设置</a></li>
+                            <li><a href="{% url 'user:logout' %}">退出</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'user:login' %}">登录</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="content-box">
+    {% block content %}
+    {% endblock %}
+</div>
+<script>
+    var flag = true
+    $('.icon-box').click(function () {
+        if (flag) {
+            $('.icon-nav').css('display', 'block');
+        } else {
+            $('.icon-nav').css('display', 'none');
+        }
+        flag = !flag
+    })
+
+</script>
+{% block js %}
+{% endblock %}
+</body>
+</html>

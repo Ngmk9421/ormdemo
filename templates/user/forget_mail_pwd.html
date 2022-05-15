@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}手机号修改密码{% endblock %}</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #f1f1f1;
+        }
+
+        .box {
+            width: 300px;
+            height: 450px;
+            background-color: #fff;
+            margin: 80px auto;
+            padding: 50px 50px 30px;
+        }
+
+        .content {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    {% block style %}
+        <style>
+            .nav {
+                height: 50px;
+                font-size: 20px;
+                padding: 20px 0 0 70px;
+            }
+
+            .nav_style {
+                color: #ea6f5a;
+                border-bottom: 2px solid #ea6f5a;
+            }
+
+            .nav a {
+                padding: 7px 15px;
+            }
+
+            .info {
+                margin-top: 40px;
+            }
+
+            .info input {
+                width: 250px;
+                height: 42px;
+                padding: 4px 12px 4px 35px;
+                outline: none;
+            }
+
+            .btn {
+                margin-top: 40px;
+                width: 300px;
+                height: 43px;
+                border-radius: 21px;
+                border: none;
+                font-size: 18px;
+                color: #fff;
+                background-color: #42c02e;
+                cursor: pointer;
+            }
+        </style>
+    {% endblock %}
+    {% block js %}{% endblock %}
+</head>
+<body>
+<div class="box">
+    {% if msg %}
+        <div>{{ msg }}</div>
+    {% endif %}
+    <div class="content">
+        {% block content %}
+            <form action="{% url 'user:forget_mail_pwd' %}" method="post">
+                {% csrf_token %}
+                <div class="nav">用邮箱重置密码</div>
+                <div class="info">
+                    <div>
+                        <input type="text" placeholder="邮箱" name="mail">
+                    </div>
+                    <div>
+                        <input type="text" name="code" placeholder="验证码">
+                        <button type="button" class="btn-code">发送验证码</button>
+                    </div>
+                    <div>
+                        <input type="password" placeholder="新密码" name="new_pwd">
+                    </div>
+                </div>
+                <input type="submit" class="btn" value="修改密码">
+            </form>
+        {% endblock %}
+    </div>
+</div>
+<script>
+    $('.btn-code').click(function () {
+        $(this).attr('disabled', true)
+        let i = 59
+        $(this).text(i + '后再次发送')
+        let timer = setInterval(() => {
+            $(this).text(--i + '后再次发送')
+            if (i === 0) {
+                clearInterval(timer)
+                $(this).text('发送验证码')
+                $(this).attr('disabled', false)
+            }
+        }, 1000)
+        var mail = $('input[name="mail"]').val()
+        var csrf = $('input[name="csrfmiddlewaretoken"]').val()
+        $.getJSON('{% url 'user:code_mail_pwd' %}', {mail: mail, 'csrfmiddlewaretoken': csrf}, function (data) {
+            console.log(data)
+        })
+    })
+</script>
+</body>
+</html>
